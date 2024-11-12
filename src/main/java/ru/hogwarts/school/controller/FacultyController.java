@@ -44,6 +44,18 @@ public class FacultyController {
     public ResponseEntity<List<Faculty>> getFacultyByColor(@PathVariable("color") String color) {
         return facultyService.getFacultyByColor(color);
     }
+
+    @GetMapping("find_by_color_or_name")
+    public ResponseEntity<Faculty> getFacultyByColorOrName(@RequestParam(value = "color", required = false) String color,
+                                                           @RequestParam(value = "name", required = false) String name) {
+        return facultyService.findByFacultyByColorOrName(color, name);
+    }
+
+    @GetMapping("get_all_students/{id}")
+    public ResponseEntity<List<String>> getAllStudents(@PathVariable("id") int id) {
+        return facultyService.getAllStudents(id);
+    }
+
 }
 
 
