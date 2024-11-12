@@ -32,8 +32,9 @@ public class StudentController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Student> deleteStudentById(@PathVariable("id") long id) {
-        return studentService.deleteById(id);
+    public String deleteStudentById(@PathVariable("id") long id) {
+        studentService.deleteById(id);
+        return "deleted";
     }
 
     @GetMapping("by-age/{age}")

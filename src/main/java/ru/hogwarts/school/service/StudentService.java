@@ -2,58 +2,45 @@ package ru.hogwarts.school.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
+import ru.hogwarts.school.repositories.StudentRepository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class StudentService {
-    private final Map<Long, Student> students;
-    private Long id;
+    private final StudentRepository studentRepository;
 
-    public StudentService() {
-        this.students = new HashMap<Long, Student>();
-        this.id = 0L;
+
+
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     public ResponseEntity<Student> getById(long id) {
-        if (!students.containsKey(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(students.get(id));
+        return ResponseEntity.ok(studentRepository.findById((int) id).get());
     }
 
-    public ResponseEntity<Student> deleteById(long id) {
-        if (!students.containsKey(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(students.remove(id));
+    public void deleteById(long id) {
+        studentRepository.deleteById((int) id);
     }
 
     public ResponseEntity<Student> update(Student student) {
-        if (!students.containsKey(student.getId())) {
-            return ResponseEntity.notFound().build();
-        }
-        students.put(student.getId(), student);
-        return ResponseEntity.ok(student);
+        return ResponseEntity.ok(studentRepository.save(student));
     }
 
     public ResponseEntity<Student> create(Student student) {
-        student.setId(id + 1);
-        students.put(++id, student);
-        return ResponseEntity.ok(students.get(id - 1));
+        return ResponseEntity.ok(studentRepository.save(student));
     }
 
 
     public ResponseEntity<List<Student>> getByAge(int age) {
-        List<Student> result = students.values().stream().filter(e -> e.getAge() == age).toList();
-        if (result.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(studentRepository.findAllByAge(age));
     }
 
 
