@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
@@ -37,4 +39,16 @@ public class FacultyService {
         return ResponseEntity.ok(facultyRepository.findAllByColor(color));
     }
 
+    public ResponseEntity<Faculty> findByFacultyByColorOrName(String color, String name) {
+        if (color == null) {
+            return ResponseEntity.ok(facultyRepository.findFirstByNameIgnoreCase(name));
+        } else if (name == null) {
+            return ResponseEntity.ok(facultyRepository.findFirstByColorIgnoreCase(color));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<List<String>> getAllStudents(int id) {
+        return ResponseEntity.ok(facultyRepository.findById(id).get().getStudents().stream().map(e -> e.getName()).toList());
+    }
 }

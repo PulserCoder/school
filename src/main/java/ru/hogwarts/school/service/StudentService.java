@@ -44,6 +44,11 @@ public class StudentService {
     }
 
 
+    public ResponseEntity<List<Student>> getByAgeBetween(int min, int max) {
+        return ResponseEntity.ok(studentRepository.getStudentsByAgeBetween(min, max));
+    }
 
-
+    public ResponseEntity<String> getFaculty(int id) {
+        return ResponseEntity.ok(studentRepository.findById(id).get().getFaculty());
+    }
 }
