@@ -50,7 +50,7 @@ public class StudentController {
     }
 
     @GetMapping("get_faculty/{id}")
-    public ResponseEntity<String> getFacultyById(@PathVariable("id") int id) {
+    public ResponseEntity<Faculty> getFacultyById(@PathVariable("id") int id) {
         return studentService.getFaculty(id);
     }
 

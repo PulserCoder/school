@@ -1,6 +1,8 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Objects;
 
@@ -12,6 +14,21 @@ public class Student {
     private String name;
     private int age;
 
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+
+    @OneToOne(mappedBy = "student")
+    private Avatar avatar;
+
+    @JsonIgnore
+    @Value("${path.to.avatars.folder}")
+    private String avatarsDir;
+
     @ManyToOne()
     @JoinColumn(name = "faculty_id")
     private Faculty faculty;
@@ -20,8 +37,12 @@ public class Student {
         return id;
     }
 
-    public String getFaculty() {
-        return faculty.getName();
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public String getAvatarsDir() {
+        return avatarsDir;
     }
 
     public void setId(long id) {
