@@ -27,7 +27,7 @@ public class StudentController {
         return studentService.getById(id);
     }
 
-    @PutMapping
+    @PutMapping("")
     public ResponseEntity<Student> updateStudent(@RequestBody Student student) {
         return studentService.update(student);
     }
