@@ -22,6 +22,7 @@ public class Student {
         this.avatar = avatar;
     }
 
+    @JsonIgnore
     @OneToOne(mappedBy = "student")
     private Avatar avatar;
 
@@ -63,6 +64,10 @@ public class Student {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
     @Override
