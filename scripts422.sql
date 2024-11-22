@@ -11,6 +11,5 @@ create table car(
     id integer primary key,
     mark varchar(255) not null,
     model varchar(255) not null,
-    cost integer not null,
-    person_id integer references person (id)
+    cost integer not null
 );
