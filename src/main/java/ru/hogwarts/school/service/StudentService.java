@@ -51,4 +51,17 @@ public class StudentService {
     public ResponseEntity<Faculty> getFaculty(int id) {
         return ResponseEntity.ok(studentRepository.findById(id).get().getFaculty());
     }
+
+    public ResponseEntity<Integer> getCountOfStudents() {
+        return ResponseEntity.ok(studentRepository.getCountOfStudents());
+    }
+
+
+    public ResponseEntity<Float> getAverage() {
+        return ResponseEntity.ok(studentRepository.getAverage());
+    }
+
+    public ResponseEntity<List<Student>> getLast5Students() {
+        return ResponseEntity.ok(studentRepository.getLast5Students());
+    }
 }

@@ -56,6 +56,7 @@ public class FacultyController {
         return facultyService.getAllStudents(id);
     }
 
+
 }
 
 
