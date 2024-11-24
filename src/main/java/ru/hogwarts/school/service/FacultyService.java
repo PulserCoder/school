@@ -9,8 +9,10 @@ import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.FacultyRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
@@ -61,5 +63,19 @@ public class FacultyService {
     public ResponseEntity<List<String>> getAllStudents(int id) {
         logger.info("Get faculty students by id: {}", id);
         return ResponseEntity.ok(facultyRepository.findById(id).get().getStudents().stream().map(e -> e.getName()).toList());
+    }
+
+    public ResponseEntity<String> getLongestName() {
+        List<Faculty> facultyList = facultyRepository.findAll();
+        Faculty faculty = facultyList.get(facultyList.size() - 1);
+        return ResponseEntity.ok(facultyList.stream().max(Comparator.comparingInt(e -> e.getName().length()))
+                .orElse(faculty).getName());
+    }
+
+    public ResponseEntity<Integer> getSomeValue() {
+        return ResponseEntity.ok(Stream.iterate(1, a -> a + 1)
+                .parallel()
+                .limit(1000000)
+                .reduce(0, (a, b) -> a + b));
     }
 }

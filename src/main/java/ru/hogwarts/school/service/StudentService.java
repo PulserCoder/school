@@ -4,15 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repositories.StudentRepository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StudentService {
@@ -75,5 +71,26 @@ public class StudentService {
     public ResponseEntity<List<Student>> getLast5Students() {
         logger.info("Get student last 5 students");
         return ResponseEntity.ok(studentRepository.getLast5Students());
+    }
+
+    public ResponseEntity<List<String>> getAllStudentsWhosNameStartsWith(String letter) {
+        List<Student> students = studentRepository.findAll();
+        List<String> proceedStudents = students.stream()
+                .parallel()
+                .map(i -> i.getName().toUpperCase())
+                .filter(i -> i.startsWith(letter.toUpperCase()))
+                .sorted()
+                .toList();
+        return ResponseEntity.ok(proceedStudents);
+    }
+
+    public ResponseEntity<Integer> getAverageAge() {
+        logger.info("Get student average age");
+        List<Student> students = studentRepository.findAll();
+        double proceedStudents = (double) (students.stream()
+                .parallel()
+                .mapToInt(Student::getAge)
+                .sum() / students.size());
+        return ResponseEntity.ok((int) Math.round(proceedStudents));
     }
 }
