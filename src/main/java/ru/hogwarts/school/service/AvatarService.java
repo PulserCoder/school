@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +20,7 @@ import java.util.List;
 public class AvatarService {
     private final AvatarRepository avatarRepository;
     private final StudentRepository studentRepository;
+    Logger logger = LoggerFactory.getLogger(AvatarService.class);
 
     public AvatarService(AvatarRepository avatarRepository, StudentRepository studentRepository) {
         this.avatarRepository = avatarRepository;
@@ -25,6 +28,7 @@ public class AvatarService {
     }
 
     public void uploadFile(Long student_id, MultipartFile file) throws IOException {
+        logger.info("(uploadFile) Start uploading file avatar");
         Student student = studentRepository.findById(Math.toIntExact(student_id)).get();
         Path pathFile = Path.of(student.getAvatarsDir(), student.getId() + "." +
                 file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".") + 1));
@@ -46,23 +50,29 @@ public class AvatarService {
         avatar.setMediaType(file.getContentType());
         avatar.setData(file.getBytes());
         avatarRepository.save(avatar);
+        logger.info("(uploadFile) End uploading file avatar");
 
     }
 
     public Avatar findAvatar(Long student_id) {
+        logger.info("(findAvatar) Start finding avatar for " + student_id);
         Student avatar = studentRepository.findById(Math.toIntExact(student_id)).get();
         if (avatar.getAvatar() == null) {
+            logger.info("(findAvatar) Avatar not found");
             return new Avatar();
         }
+        logger.info("(findAvatar) End finding avatar for " + student_id);
         return avatar.getAvatar();
     }
 
 
     public List<Avatar> getAvatarByPage(int page, int size) {
         if (page < 1) {
+            logger.info("(getAvatarByPage) Page number is less than 1 in getAvatarByPage");
             return new ArrayList<>();
         }
         PageRequest pageRequest = PageRequest.of(page - 1, size);
+        logger.info("(getAvatarByPage) Finding avatars at {} with size of page {}", page, size);
         return avatarRepository.findAll(pageRequest).getContent();
     }
 }
