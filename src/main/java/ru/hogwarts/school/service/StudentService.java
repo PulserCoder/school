@@ -93,4 +93,51 @@ public class StudentService {
                 .sum() / students.size());
         return ResponseEntity.ok((int) Math.round(proceedStudents));
     }
+
+    public void printAllStudentsParallel() {
+        List<Student> students = studentRepository.findAll();
+        new Thread(() -> {
+            printAllStudents(0,1, students);
+        }).start();
+        new Thread(() -> {
+            printAllStudents(2,3, students);
+        }).start();
+        new Thread(() -> {
+            printAllStudents(4,5, students);
+        }).start();
+
+
+    }
+
+    public void printAllStudents(int indexLeft, int indexRight, List<Student> students) {
+        for (int i = indexLeft; i <= indexRight; i++) {
+            System.out.println(students.get(i).getName());
+        }
+    }
+
+    public void printSync() {
+        List<Student> students = studentRepository.findAll();
+        new Thread(() -> {
+            printAllStudentsSync(0,1, students);
+        }).start();
+        new Thread(() -> {
+            printAllStudentsSync(2,3, students);
+        }).start();
+        new Thread(() -> {
+            printAllStudentsSync(4,5, students);
+        }).start();
+    }
+
+    public void printAllStudentsSync(int indexLeft, int indexRight, List<Student> students) {
+        synchronized (students) {
+            for (int i = indexLeft; i <= indexRight; i++) {
+                System.out.println(students.get(i).getName());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 }
