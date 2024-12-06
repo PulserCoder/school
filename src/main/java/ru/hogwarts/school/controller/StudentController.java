@@ -68,4 +68,24 @@ public class StudentController {
     public ResponseEntity<List<Student>> getLast5Students() {
         return studentService.getLast5Students();
     }
+
+    @GetMapping("get_students_who_starts_with")
+    public ResponseEntity<List<String>> getStudentsWhosNameStartsWith(@RequestParam("letter") String letter) {
+        return studentService.getAllStudentsWhosNameStartsWith(letter);
+    }
+
+    @GetMapping("average_students_age")
+    public ResponseEntity<Integer> getAverageAgeOfStudent() {
+        return studentService.getAverageAge();
+    }
+
+    @GetMapping("print-parallel")
+    public void printParallel() {
+        studentService.printAllStudentsParallel();
+    }
+
+    @GetMapping("print-synchronized")
+    public void printSync() {
+        studentService.printSync();
+    }
 }
